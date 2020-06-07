@@ -24,24 +24,41 @@ namespace Taxikosten
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            tbStart.Focus();
-        }
-
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-            calc();
+            tbDistance.Focus();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                calc();
+                Calc();
             }
         }
 
-        private void calc()
+        private void button_Click(object sender, RoutedEventArgs e)
         {
+            Calc();
+        }
+
+        private void Calc()
+        {
+            // Parse aantal km.
+            double cost;
+            try
+            {
+                cost = double.Parse(tbDistance.Text); // 1 per km dus geen berekening nodig.
+                Console.WriteLine("distance=" + cost);
+                tbDistance.Background = Brushes.Transparent;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error parsing distance: " + ex.Message);
+                tbDistance.Background = Brushes.Red;
+                tbDistance.SelectAll();
+                tbDistance.Focus();
+                return;
+            }
+
             // Parse starttijd.
             TimeSpan start;
             try
@@ -78,20 +95,22 @@ namespace Taxikosten
                 return;
             }
 
+            // Bereken totale duur.
             TimeSpan time = end - start;
-            double cost = 0;
             StringBuilder message = new StringBuilder();
 
+            // Bereken tijd tussen 08:00 en 18:00.
             TimeSpan timeInFrame = GetTimeInFrame(start, end);
             if (timeInFrame != TimeSpan.Zero)
             {
-                cost = timeInFrame.TotalMinutes * 0.25;
+                cost += timeInFrame.TotalMinutes * 0.25;
                 time -= timeInFrame;
 
                 message.Append("Tijd tussen 08:00 en 18:00: " + timeInFrame);
                 message.AppendLine();
             }
 
+            // Bereken tijd buiten 08:00 en 18:00.
             if (time != TimeSpan.Zero)
             {
                 cost += time.TotalMinutes * 0.45;
@@ -100,6 +119,7 @@ namespace Taxikosten
                 message.AppendLine();
             }
 
+            // Bereken weekendtoeslag.
             message.AppendLine();
             if (isWeekend(start))
             {
@@ -109,8 +129,8 @@ namespace Taxikosten
                 cost *= 1.15;
             }
 
+            // Toen MessageBox met ritprijs.
             message.Append("Ritprijs: " + formatPrice(cost));
-
             MessageBox.Show(message.ToString(), "Taxikosten",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }

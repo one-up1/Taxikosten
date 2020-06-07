@@ -6,10 +6,12 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Width="400"
-        Height="320"
+        Height="340"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Title="Taxikosten" MinHeight="12" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
+        Title="Taxikosten"
+        Loaded="Window_Loaded"
+        KeyDown="Window_KeyDown">
     
     <Grid>
 
@@ -17,29 +19,48 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="60" />
+            <ColumnDefinition Width="80" />
             <ColumnDefinition />
-            
         </Grid.ColumnDefinitions>
 
         <Calendar
             Name="calendar"
+            Grid.Row="0"
+            Grid.Column="0"
             Grid.ColumnSpan="2"
             SelectedDate="{x:Static sys:DateTime.Now}" />
 
         <Label
-            Content="Starttijd:"
+            Content="Aantal km:"
             Grid.Row="1"
+            Grid.Column="0"
+            VerticalContentAlignment="Center"
+            FontWeight="Bold" />
+
+        <TextBox
+            Name="tbDistance"
+            Grid.Row="1"
+            Grid.Column="1"
+            HorizontalAlignment="Left"
+            Width="100"
+            Margin="5"
+            FontSize="16" />
+
+        <Label
+            Content="Starttijd:"
+            Grid.Row="2"
+            Grid.Column="0"
             VerticalContentAlignment="Center"
             FontWeight="Bold" />
 
         <TextBox
             Name="tbStart"
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="1"
             HorizontalAlignment="Left"
             Width="100"
@@ -48,13 +69,14 @@
 
         <Label
             Content="Eindtijd:"
-            Grid.Row="2"
+            Grid.Row="3"
+            Grid.Column="0"
             VerticalContentAlignment="Center"
             FontWeight="Bold" />
 
         <TextBox
             Name="tbEnd"
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="1"
             HorizontalAlignment="Left"
             Width="100"
@@ -63,7 +85,7 @@
 
         <Button
             Name="button"
-            Grid.Row="3"
+            Grid.Row="4"
             Grid.ColumnSpan="2"
             Content="OK"
             Click="button_Click" />
